@@ -2,7 +2,7 @@
 
 > 从马克思政治经济学的三大基石出发，跨越农业、工业、信息、AI 四个文明时代，系统解构商业模式的底层驱动逻辑，并畅想 AI 时代的全新商业形态。
 >
-> 🔗访问链接： https://siryzhang.github.io/Panoramic-Research-on-Business-Models/
+> 🔗访问链接：[Panoramic Research on Business Models]( https://siryzhang.github.io/Panoramic-Research-on-Business-Models/)
 
 
 
