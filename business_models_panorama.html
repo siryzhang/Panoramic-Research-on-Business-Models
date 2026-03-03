@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商业模式全景研究 — 生产力·生产资料·生产关系</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-elevated: #1a1a26;
+  --bg-hover: #222233;
+  --border-subtle: rgba(255,255,255,0.06);
+  --border-active: rgba(255,255,255,0.15);
+  --text-primary: #e8e6e3;
+  --text-secondary: #9a9a9a;
+  --text-muted: #5a5a6a;
+  /* Era colors */
+  --agri-primary: #c8a96e;
+  --agri-glow: rgba(200,169,110,0.15);
+  --agri-deep: #8a7240;
+  --indus-primary: #7a8fa6;
+  --indus-glow: rgba(122,143,166,0.15);
+  --indus-deep: #4a6078;
+  --info-primary: #6aadcb;
+  --info-glow: rgba(106,173,203,0.15);
+  --info-deep: #3a7a9a;
+  --ai-primary: #b07adf;
+  --ai-glow: rgba(176,122,223,0.15);
+  --ai-deep: #7a4aaf;
+  /* Dimension colors */
+  --force-color: #e06050;
+  --means-color: #50b870;
+  --relation-color: #5080e0;
+  --hybrid-color: #d0a030;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #333 transparent;
+}
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: 'Noto Sans SC', sans-serif;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 60px 20px;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 50%, var(--agri-glow), transparent),
+    radial-gradient(ellipse 50% 40% at 45% 50%, var(--indus-glow), transparent),
+    radial-gradient(ellipse 50% 40% at 70% 50%, var(--info-glow), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 50%, var(--ai-glow), transparent);
+  animation: heroGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes heroGlow {
+  0% { opacity: 0.4; }
+  100% { opacity: 0.8; }
+}
+
+.hero-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border: 1px solid var(--border-active);
+  border-radius: 100px;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  backdrop-filter: blur(10px);
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--ai-primary);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.4; transform:scale(0.6); }
+}
+
+.hero h1 {
+  position: relative;
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(32px, 5vw, 64px);
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 24px;
+  letter-spacing: 2px;
+}
+
+.hero h1 .line2 {
+  display: block;
+  font-size: 0.55em;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 6px;
+  margin-top: 8px;
+}
+
+.hero-sub {
+  position: relative;
+  max-width: 720px;
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  margin-bottom: 50px;
+}
+
+.hero-dimensions {
+  position: relative;
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dim-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  cursor: default;
+  transition: all 0.3s;
+}
+
+.dim-pill:hover {
+  border-color: var(--border-active);
+  transform: translateY(-2px);
+}
+
+.dim-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dim-pill .label {
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.dim-pill .desc {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ===== NAVIGATION ===== */
+.era-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 20px;
+  background: rgba(10,10,15,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.era-nav-btn {
+  padding: 10px 28px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-secondary);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  letter-spacing: 1px;
+}
+
+.era-nav-btn:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.era-nav-btn.active {
+  border-color: var(--border-active);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+/* ===== ERA SECTIONS ===== */
+.era-section {
+  padding: 80px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.era-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.era-epoch {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.era-header h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 900;
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+
+.era-header .thesis {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.9;
+}
+
+/* ===== DIMENSION BLOCKS ===== */
+.dimension-block {
+  margin-bottom: 60px;
+}
+
+.dim-title-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.dim-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.dim-title-bar h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.dim-title-bar .dim-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+
+/* ===== MODEL CARDS ===== */
+.models-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+.model-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 28px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+.model-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 16px 16px 0 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.model-card:hover {
+  border-color: var(--border-active);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.model-card:hover::before {
+  opacity: 1;
+}
+
+.model-card[data-dim="force"]::before { background: var(--force-color); }
+.model-card[data-dim="means"]::before { background: var(--means-color); }
+.model-card[data-dim="relation"]::before { background: var(--relation-color); }
+.model-card[data-dim="hybrid"]::before { background: var(--hybrid-color); }
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.card-model-name {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.card-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.card-tag {
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.tag-force { background: rgba(224,96,80,0.15); color: var(--force-color); }
+.tag-means { background: rgba(80,184,112,0.15); color: var(--means-color); }
+.tag-relation { background: rgba(80,128,224,0.15); color: var(--relation-color); }
+
+.card-logic {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.card-companies {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.company-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.company-logo {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.company-info .co-name {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.company-info .co-analysis {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* ===== AI ERA SPECIAL ===== */
+.ai-vision-section {
+  position: relative;
+}
+
+.ai-vision-section::before {
+  content: '';
+  position: absolute;
+  inset: -40px;
+  background:
+    radial-gradient(ellipse 50% 50% at 30% 30%, rgba(176,122,223,0.06), transparent),
+    radial-gradient(ellipse 40% 40% at 70% 70%, rgba(100,180,255,0.04), transparent);
+  pointer-events: none;
+}
+
+.vision-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-elevated));
+  border: 1px solid rgba(176,122,223,0.2);
+}
+
+.vision-card:hover {
+  border-color: rgba(176,122,223,0.4);
+  box-shadow: 0 12px 40px rgba(176,122,223,0.1);
+}
+
+.speculative-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: rgba(176,122,223,0.1);
+  border: 1px solid rgba(176,122,223,0.2);
+  font-size: 10px;
+  color: var(--ai-primary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.speculative-badge::before {
+  content: '✦';
+  font-size: 8px;
+}
+
+/* ===== CONVERGENCE SECTION ===== */
+.convergence-section {
+  padding: 80px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.convergence-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.convergence-header h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+
+.convergence-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 24px;
+}
+
+.convergence-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s;
+}
+
+.convergence-card:hover {
+  border-color: var(--hybrid-color);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(208,160,48,0.08);
+}
+
+.convergence-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--force-color), var(--means-color), var(--relation-color));
+}
+
+.conv-era-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+.conv-company {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.conv-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.conv-analysis {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.9;
+  margin-bottom: 18px;
+}
+
+.conv-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.conv-dim-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.conv-dim-label {
+  flex-shrink: 0;
+  width: 56px;
+  padding: 3px 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.conv-dim-text {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* ===== TIMELINE CONNECTOR ===== */
+.timeline-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 40px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.timeline-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
+}
+
+.timeline-arrow {
+  font-size: 20px;
+  color: var(--text-muted);
+  animation: arrowPulse 2s ease-in-out infinite;
+}
+
+@keyframes arrowPulse {
+  0%,100% { opacity:0.3; }
+  50% { opacity:0.8; }
+}
+
+/* ===== EVOLUTION MAP ===== */
+.evo-map-section {
+  padding: 80px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.evo-matrix {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+}
+
+.evo-matrix thead th {
+  padding: 16px 20px;
+  font-family: 'Noto Serif SC', serif;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  border-bottom: 2px solid var(--border-subtle);
+  position: sticky;
+  top: 56px;
+  background: var(--bg-deep);
+  z-index: 10;
+}
+
+.evo-matrix tbody td {
+  padding: 18px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: top;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.evo-matrix tbody td:first-child {
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.evo-matrix tbody tr:hover td {
+  background: var(--bg-card);
+}
+
+.cell-keyword {
+  display: inline-block;
+  padding: 2px 8px;
+  margin: 2px 3px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  text-align: center;
+  padding: 60px 20px;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 860px) {
+  .models-grid, .convergence-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-dimensions { gap: 16px; }
+  .era-nav { flex-wrap: wrap; gap: 2px; }
+  .era-nav-btn { padding: 8px 16px; font-size: 12px; }
+  .evo-matrix { font-size: 11px; }
+  .evo-matrix thead th, .evo-matrix tbody td { padding: 10px 8px; }
+}
+
+/* ===== SCROLL ANIMATIONS ===== */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== FILTER BAR ===== */
+.filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 8px 20px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  background: none;
+  color: var(--text-secondary);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  background: var(--bg-elevated);
+  border-color: var(--border-active);
+  color: var(--text-primary);
+}
+
+.filter-btn[data-filter="force"].active { border-color: var(--force-color); color: var(--force-color); }
+.filter-btn[data-filter="means"].active { border-color: var(--means-color); color: var(--means-color); }
+.filter-btn[data-filter="relation"].active { border-color: var(--relation-color); color: var(--relation-color); }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-badge">PANORAMIC RESEARCH</div>
+  <h1>
+    商业模式全景研究
+    <span class="line2">生产力 · 生产资料 · 生产关系</span>
+  </h1>
+  <p class="hero-sub">
+    从马克思政治经济学的三大基石出发，跨越农业、工业、信息、AI 四个文明时代，<br>
+    系统解构商业模式的底层驱动逻辑，并畅想 AI 时代的全新商业形态。
+  </p>
+  <div class="hero-dimensions">
+    <div class="dim-pill">
+      <div class="dim-dot" style="background:var(--force-color)"></div>
+      <div>
+        <div class="label">生产力</div>
+        <div class="desc">Productive Forces</div>
+      </div>
+    </div>
+    <div class="dim-pill">
+      <div class="dim-dot" style="background:var(--means-color)"></div>
+      <div>
+        <div class="label">生产资料</div>
+        <div class="desc">Means of Production</div>
+      </div>
+    </div>
+    <div class="dim-pill">
+      <div class="dim-dot" style="background:var(--relation-color)"></div>
+      <div>
+        <div class="label">生产关系</div>
+        <div class="desc">Relations of Production</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NAV ===== -->
+<nav class="era-nav" id="eraNav">
+  <button class="era-nav-btn active" data-era="agri">农业时代</button>
+  <button class="era-nav-btn" data-era="indus">工业时代</button>
+  <button class="era-nav-btn" data-era="info">信息时代</button>
+  <button class="era-nav-btn" data-era="ai">AI 时代</button>
+  <button class="era-nav-btn" data-era="converge">三力融合</button>
+  <button class="era-nav-btn" data-era="matrix">演进矩阵</button>
+</nav>
+
+<!-- ============================================ -->
+<!-- ===== ERA 1: AGRICULTURAL AGE ===== -->
+<!-- ============================================ -->
+<section class="era-section" id="agri">
+  <div class="era-header fade-up">
+    <div class="era-epoch" style="color:var(--agri-primary)">ERA I · 约公元前8000年 — 18世纪</div>
+    <h2 style="color:var(--agri-primary)">农业时代</h2>
+    <p class="thesis">
+      土地是一切财富的源泉。商业模式围绕对土地与自然资源的占有、人力劳动的组织、以及等级化社会关系展开。
+      生产力低下决定了商业模式以资源垄断与劳动力剥削为核心逻辑。
+    </p>
+  </div>
+
+  <!-- 生产力维度 -->
+  <div class="dimension-block fade-up">
+    <div class="dim-title-bar">
+      <div class="dim-icon" style="background:rgba(224,96,80,0.15);color:var(--force-color)">⚡</div>
+      <h3>生产力驱动的商业模式</h3>
+      <span class="dim-subtitle">技术与劳动能力决定商业形态</span>
+    </div>
+    <div class="models-grid">
+      <div class="model-card" data-dim="force">
+        <div class="card-header">
+          <div class="card-model-name">手工作坊制</div>
+          <div class="card-tags"><span class="card-tag tag-force">生产力</span></div>
+        </div>
+        <div class="card-logic">
+          以人的双手技艺为核心生产力，产品品质直接取决于工匠技能水平。生产力极度依赖个体经验传承，
+          规模受限于师徒传承速度，但产品差异化极高，形成"一匠一品"的商业逻辑。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--agri-primary)">景</div>
+            <div class="company-info">
+              <div class="co-name">景德镇官窑体系</div>
+              <div class="co-analysis">掌握独门烧制工艺（生产力壁垒），通过皇家订单保证需求。窑工技艺即商业模式的核心竞争力，一个顶级窑匠的产出可供养整个作坊。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--agri-primary)">穆</div>
+            <div class="company-info">
+              <div class="co-name">穆拉诺玻璃工坊（威尼斯）</div>
+              <div class="co-analysis">威尼斯将玻璃匠人集中于穆拉诺岛，以法律禁止技术外流。生产力（玻璃吹制技艺）即护城河，匠人被视为"国家资产"。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card" data-dim="force">
+        <div class="card-header">
+          <div class="card-model-name">水利农业集约化</div>
+          <div class="card-tags"><span class="card-tag tag-force">生产力</span></div>
+        </div>
+        <div class="card-logic">
+          通过灌溉工程提升单位土地产出，是农业时代最重要的"技术杠杆"。谁掌握水利技术，
+          谁就能把荒地变为沃土——这是最早的"技术驱动增长"商业模式。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--agri-primary)">都</div>
+            <div class="company-info">
+              <div class="co-name">都江堰-秦国粮仓体系</div>
+              <div class="co-analysis">李冰父子主导的水利工程使成都平原亩产翻倍，直接支撑秦国统一战争的后勤供给。这是"基础设施即商业模式"的原型。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生产资料维度 -->
+  <div class="dimension-block fade-up">
+    <div class="dim-title-bar">
+      <div class="dim-icon" style="background:rgba(80,184,112,0.15);color:var(--means-color)">🏭</div>
+      <h3>生产资料驱动的商业模式</h3>
+      <span class="dim-subtitle">谁掌控关键资源，谁定义游戏规则</span>
+    </div>
+    <div class="models-grid">
+      <div class="model-card" data-dim="means">
+        <div class="card-header">
+          <div class="card-model-name">土地地租制</div>
+          <div class="card-tags"><span class="card-tag tag-means">生产资料</span></div>
+        </div>
+        <div class="card-logic">
+          最纯粹的"资产持有即盈利"模式。地主无需参与生产，仅凭对土地（核心生产资料）的所有权，
+          即可通过地租抽取佃农劳动剩余。商业模式的本质是资源垄断定价权。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--means-color)">庄</div>
+            <div class="company-info">
+              <div class="co-name">欧洲庄园领主制</div>
+              <div class="co-analysis">中世纪欧洲领主通过土地封授获得世袭地产，农奴被束缚于土地。领主的"商业模式"是向农奴收取劳役地租、实物地租、货币地租三种形式的回报。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--means-color)">皇</div>
+            <div class="company-info">
+              <div class="co-name">中国皇家屯田制</div>
+              <div class="co-analysis">国家作为最大地主，通过军屯、民屯将荒地转化为收入来源。生产资料（土地）的集中控制实现了大规模农业经营。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card" data-dim="means">
+        <div class="card-header">
+          <div class="card-model-name">盐铁专营制</div>
+          <div class="card-tags"><span class="card-tag tag-means">生产资料</span></div>
+        </div>
+        <div class="card-logic">
+          国家垄断关键战略资源（盐、铁）的生产与流通，通过行政权力将自然资源转化为国家财政收入。
+          这是"资源垄断 + 行政许可"的商业模式原型，至今仍影响深远。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--means-color)">汉</div>
+            <div class="company-info">
+              <div class="co-name">汉武帝盐铁官营</div>
+              <div class="co-analysis">桑弘羊推行盐铁官营，将民间盐铁业收归国有。本质是将分散的生产资料（矿山、盐池）集中为国家垄断资产，利润直接入国库，支撑对匈奴战争开支。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生产关系维度 -->
+  <div class="dimension-block fade-up">
+    <div class="dim-title-bar">
+      <div class="dim-icon" style="background:rgba(80,128,224,0.15);color:var(--relation-color)">🤝</div>
+      <h3>生产关系驱动的商业模式</h3>
+      <span class="dim-subtitle">利益分配与合作机制决定商业结构</span>
+    </div>
+    <div class="models-grid">
+      <div class="model-card" data-dim="relation">
+        <div class="card-header">
+          <div class="card-model-name">行会垄断制</div>
+          <div class="card-tags"><span class="card-tag tag-relation">生产关系</span></div>
+        </div>
+        <div class="card-logic">
+          同业者通过组织联盟控制市场准入、价格标准和技术传播。核心不是技术或资源，
+          而是通过生产关系的制度设计——师徒等级、会费壁垒、行业规矩——建立垄断。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--relation-color)">伦</div>
+            <div class="company-info">
+              <div class="co-name">伦敦金匠行会</div>
+              <div class="co-analysis">控制金银加工准入，发展出早期银行信用功能。行会关系网络本身成为信用背书体系，"伦敦金匠的承兑书"即最早的纸币雏形。生产关系催生金融创新。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--relation-color)">杭</div>
+            <div class="company-info">
+              <div class="co-name">杭州丝绸行会</div>
+              <div class="co-analysis">统一品质标准、分配织机配额、协调出口定价。通过"行规"这一生产关系安排，实现了产业链上下游的利益协调与对外议价能力。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card" data-dim="relation">
+        <div class="card-header">
+          <div class="card-model-name">票号汇兑网络</div>
+          <div class="card-tags"><span class="card-tag tag-relation">生产关系</span></div>
+        </div>
+        <div class="card-logic">
+          基于宗族信任与合伙人制度，构建跨地域的资金流转网络。没有电报、没有铁路，
+          仅凭人与人之间的契约信任关系，实现了金融汇兑功能。商业模式建立在关系网络之上。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--relation-color)">日</div>
+            <div class="company-info">
+              <div class="co-name">日升昌票号（山西）</div>
+              <div class="co-analysis">首创"身股制"——掌柜不出资却能分红，是最早的"人力资本入股"制度。核心竞争力不在于资本量，而在于遍布全国的掌柜信任网络与激励机制设计。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="timeline-divider">
+  <div class="timeline-line"></div>
+  <div class="timeline-arrow">⟶</div>
+  <div class="timeline-line"></div>
+</div>
+
+<!-- ============================================ -->
+<!-- ===== ERA 2: INDUSTRIAL AGE ===== -->
+<!-- ============================================ -->
+<section class="era-section" id="indus">
+  <div class="era-header fade-up">
+    <div class="era-epoch" style="color:var(--indus-primary)">ERA II · 18世纪 — 20世纪中叶</div>
+    <h2 style="color:var(--indus-primary)">工业时代</h2>
+    <p class="thesis">
+      蒸汽与电力重新定义了生产力的上限。机器取代人力，工厂取代作坊，公司取代行会。
+      规模经济成为核心逻辑——谁能以最低成本制造最多商品，谁就主宰市场。
+    </p>
+  </div>
+
+  <!-- 生产力 -->
+  <div class="dimension-block fade-up">
+    <div class="dim-title-bar">
+      <div class="dim-icon" style="background:rgba(224,96,80,0.15);color:var(--force-color)">⚡</div>
+      <h3>生产力驱动的商业模式</h3>
+      <span class="dim-subtitle">机械化与流水线带来的效率革命</span>
+    </div>
+    <div class="models-grid">
+      <div class="model-card" data-dim="force">
+        <div class="card-header">
+          <div class="card-model-name">流水线大规模制造</div>
+          <div class="card-tags"><span class="card-tag tag-force">生产力</span></div>
+        </div>
+        <div class="card-logic">
+          将复杂劳动分解为简单重复工序，通过流水线实现标准化量产。核心创新不在于产品本身，
+          而在于生产过程的重新设计——让每个工人只做一件事，但做到极致。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--indus-primary)">F</div>
+            <div class="company-info">
+              <div class="co-name">福特汽车 Ford</div>
+              <div class="co-analysis">T型车流水线将汽车组装时间从12小时缩短至93分钟，价格从850美元降至260美元。"让造车的人也买得起车"——生产力突破直接改写了市场边界。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--indus-primary)">卡</div>
+            <div class="company-info">
+              <div class="co-name">卡内基钢铁</div>
+              <div class="co-analysis">引入贝塞麦转炉工艺，使钢铁成本暴降。产能即定价权，卡内基通过极致压缩成本，在价格战中碾碎竞争对手，最终垄断美国钢铁60%产能。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card" data-dim="force">
+        <div class="card-header">
+          <div class="card-model-name">精益制造/丰田生产方式</div>
+          <div class="card-tags"><span class="card-tag tag-force">生产力</span></div>
+        </div>
+        <div class="card-logic">
+          不追求产量最大化，而是追求浪费最小化。通过JIT（准时制）、看板管理、持续改善，
+          将同样的资源转化为更高质量的产出。这是"生产力密度"的飞跃。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--indus-primary)">丰</div>
+            <div class="company-info">
+              <div class="co-name">丰田汽车 Toyota</div>
+              <div class="co-analysis">丰田生产方式（TPS）用一半的人力、一半的场地、一半的时间达到同等产出。不是"做更多"，而是"浪费更少"——一种全新的生产力哲学。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生产资料 -->
+  <div class="dimension-block fade-up">
+    <div class="dim-title-bar">
+      <div class="dim-icon" style="background:rgba(80,184,112,0.15);color:var(--means-color)">🏭</div>
+      <h3>生产资料驱动的商业模式</h3>
+      <span class="dim-subtitle">工厂、能源、供应链的垄断逻辑</span>
+    </div>
+    <div class="models-grid">
+      <div class="model-card" data-dim="means">
+        <div class="card-header">
+          <div class="card-model-name">垂直整合/资源帝国</div>
+          <div class="card-tags"><span class="card-tag tag-means">生产资料</span></div>
+        </div>
+        <div class="card-logic">
+          从原材料到终端销售，控制整条产业链的每一个环节。通过拥有全部生产资料，
+          消除中间环节利润外流，同时获得对上下游的极致掌控力。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--means-color)">S</div>
+            <div class="company-info">
+              <div class="co-name">标准石油 Standard Oil</div>
+              <div class="co-analysis">洛克菲勒从炼油起步，逐步控制油田、管道、铁路运输、零售终端。鼎盛时期控制美国90%炼油产能。商业模式本质：让竞争者无资源可用。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--means-color)">克</div>
+            <div class="company-info">
+              <div class="co-name">克虏伯钢铁帝国</div>
+              <div class="co-analysis">从铁矿石开采到钢铁冶炼、武器制造，乃至工人住宅、医院、学校全部自建。"克虏伯城"本身就是一个自给自足的微型经济体，生产资料全闭环。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card" data-dim="means">
+        <div class="card-header">
+          <div class="card-model-name">能源基础设施垄断</div>
+          <div class="card-tags"><span class="card-tag tag-means">生产资料</span></div>
+        </div>
+        <div class="card-logic">
+          控制工业文明的"血液"——能源网络。电力、石油、天然气管网具有天然垄断属性，
+          一旦建成即形成巨大的沉没成本壁垒，后来者几乎无法竞争。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--means-color)">G</div>
+            <div class="company-info">
+              <div class="co-name">通用电气 GE（早期）</div>
+              <div class="co-analysis">爱迪生不仅发明灯泡，更建设了整个电力供应系统——发电站、输电网、变压器、电表。控制"用电"这一核心生产资料，比卖灯泡的利润大百倍。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生产关系 -->
+  <div class="dimension-block fade-up">
+    <div class="dim-title-bar">
+      <div class="dim-icon" style="background:rgba(80,128,224,0.15);color:var(--relation-color)">🤝</div>
+      <h3>生产关系驱动的商业模式</h3>
+      <span class="dim-subtitle">现代公司制与资本市场的组织革命</span>
+    </div>
+    <div class="models-grid">
+      <div class="model-card" data-dim="relation">
+        <div class="card-header">
+          <div class="card-model-name">股份制公司与职业经理人</div>
+          <div class="card-tags"><span class="card-tag tag-relation">生产关系</span></div>
+        </div>
+        <div class="card-logic">
+          所有权与经营权分离的革命性制度创新。数百万小股东通过股票市场共同拥有企业，
+          由职业经理人负责运营。这一生产关系变革释放了史无前例的资本动员能力。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--relation-color)">东</div>
+            <div class="company-info">
+              <div class="co-name">荷兰东印度公司 VOC</div>
+              <div class="co-analysis">人类历史上第一家股份制公司（1602年），首创可交易股票。通过向公众发行股票，将殖民贸易的巨额风险分散给全社会，让普通市民也能参与远洋贸易利润。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--relation-color)">通</div>
+            <div class="company-info">
+              <div class="co-name">通用电气 GE（管理革命期）</div>
+              <div class="co-analysis">杰克·韦尔奇时代的GE发明了"职业CEO"范式——六西格玛、末位淘汰、事业部制。GE不仅是工业公司，更是"管理关系"的实验室，其管理模式被全球复制。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card" data-dim="relation">
+        <div class="card-header">
+          <div class="card-model-name">特许经营制</div>
+          <div class="card-tags"><span class="card-tag tag-relation">生产关系</span></div>
+        </div>
+        <div class="card-logic">
+          品牌方不直接拥有门店（生产资料），而是通过标准化运营体系输出"关系模板"。
+          加盟商出资出力，品牌方出系统出标准。核心资产是组织关系的可复制性。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--relation-color)">M</div>
+            <div class="company-info">
+              <div class="co-name">麦当劳 McDonald's</div>
+              <div class="co-analysis">雷·克罗克洞察到：麦当劳的真正业务不是卖汉堡，而是卖"如何开一家成功汉堡店"的关系模板。93%的门店由加盟商运营，麦当劳本质是"商业关系的批发商"。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="timeline-divider">
+  <div class="timeline-line"></div>
+  <div class="timeline-arrow">⟶</div>
+  <div class="timeline-line"></div>
+</div>
+
+<!-- ============================================ -->
+<!-- ===== ERA 3: INFORMATION AGE ===== -->
+<!-- ============================================ -->
+<section class="era-section" id="info">
+  <div class="era-header fade-up">
+    <div class="era-epoch" style="color:var(--info-primary)">ERA III · 20世纪中叶 — 2020s</div>
+    <h2 style="color:var(--info-primary)">信息时代</h2>
+    <p class="thesis">
+      比特取代原子成为价值载体。边际成本趋近于零的数字产品改写了一切经济规律——
+      网络效应取代规模经济，数据取代石油成为核心生产资料，平台取代公司成为主导组织形态。
+    </p>
+  </div>
+
+  <!-- 生产力 -->
+  <div class="dimension-block fade-up">
+    <div class="dim-title-bar">
+      <div class="dim-icon" style="background:rgba(224,96,80,0.15);color:var(--force-color)">⚡</div>
+      <h3>生产力驱动的商业模式</h3>
+      <span class="dim-subtitle">软件、算法与数字化工具的效率跃迁</span>
+    </div>
+    <div class="models-grid">
+      <div class="model-card" data-dim="force">
+        <div class="card-header">
+          <div class="card-model-name">SaaS 软件即服务</div>
+          <div class="card-tags"><span class="card-tag tag-force">生产力</span></div>
+        </div>
+        <div class="card-logic">
+          将专业能力封装为软件工具，按订阅制向全球用户交付。一套代码服务百万客户，
+          边际成本近乎为零。商业模式的本质是"将生产力工具化，再将工具民主化"。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--info-primary)">S</div>
+            <div class="company-info">
+              <div class="co-name">Salesforce</div>
+              <div class="co-analysis">将CRM从本地部署的百万级项目变成月付150美元的云服务。马克·贝尼奥夫打出"No Software"口号——不是消灭软件，而是消灭软件的低效交付方式。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--info-primary)">F</div>
+            <div class="company-info">
+              <div class="co-name">Figma</div>
+              <div class="co-analysis">把设计工具搬到浏览器，让协作成为默认模式。生产力不仅提升了"设计速度"，更提升了"设计-开发协作效率"——重新定义了生产力的度量维度。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card" data-dim="force">
+        <div class="card-header">
+          <div class="card-model-name">搜索引擎 / 信息整合</div>
+          <div class="card-tags"><span class="card-tag tag-force">生产力</span></div>
+        </div>
+        <div class="card-logic">
+          互联网让信息爆炸，但未被组织的信息毫无价值。搜索引擎的本质是"信息生产力倍增器"——
+          将寻找信息的时间从小时级压缩到秒级，释放出全人类规模的认知生产力。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--info-primary)">G</div>
+            <div class="company-info">
+              <div class="co-name">Google</div>
+              <div class="co-analysis">PageRank算法将互联网从"信息垃圾场"变成"人类知识索引"。但其商业模式的精妙在于：免费提供生产力工具（搜索），通过注意力变现（广告）获利。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生产资料 -->
+  <div class="dimension-block fade-up">
+    <div class="dim-title-bar">
+      <div class="dim-icon" style="background:rgba(80,184,112,0.15);color:var(--means-color)">🏭</div>
+      <h3>生产资料驱动的商业模式</h3>
+      <span class="dim-subtitle">数据、算力与平台基础设施的新垄断</span>
+    </div>
+    <div class="models-grid">
+      <div class="model-card" data-dim="means">
+        <div class="card-header">
+          <div class="card-model-name">云计算基础设施</div>
+          <div class="card-tags"><span class="card-tag tag-means">生产资料</span></div>
+        </div>
+        <div class="card-logic">
+          将计算资源（服务器、存储、网络）从"产品"变为"公用事业"。如同工业时代的电网，
+          云平台掌控了数字时代最核心的生产资料——算力，并通过按需计费模式出租。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--means-color)">A</div>
+            <div class="company-info">
+              <div class="co-name">AWS（Amazon Web Services）</div>
+              <div class="co-analysis">亚马逊把自用服务器多余产能出租，意外创造了云计算产业。全球数百万企业运行在AWS之上——AWS控制的不是数据，而是"运行数据的基础设施"，这比数据本身更底层。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card" data-dim="means">
+        <div class="card-header">
+          <div class="card-model-name">数据资产垄断</div>
+          <div class="card-tags"><span class="card-tag tag-means">生产资料</span></div>
+        </div>
+        <div class="card-logic">
+          "数据是新石油"——掌握海量用户数据即掌握了数字经济的核心生产资料。
+          数据的特殊性在于：越用越多（网络效应）、越多越准（算法训练）、越准越难替代（转换成本）。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--means-color)">M</div>
+            <div class="company-info">
+              <div class="co-name">Meta（Facebook）</div>
+              <div class="co-analysis">30亿用户的社交图谱、兴趣偏好、行为数据构成了人类历史上最大的行为数据库。这些数据既是广告精准投放的燃料，也是AI训练的金矿——生产资料的复利效应。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--means-color)">B</div>
+            <div class="company-info">
+              <div class="co-name">Bloomberg Terminal</div>
+              <div class="co-analysis">垄断金融数据终端市场40年。32.5万台终端，年费2.5万美元。金融从业者对其依赖度堪比水和空气——数据生产资料一旦形成行业标准，替代成本趋近于无穷。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生产关系 -->
+  <div class="dimension-block fade-up">
+    <div class="dim-title-bar">
+      <div class="dim-icon" style="background:rgba(80,128,224,0.15);color:var(--relation-color)">🤝</div>
+      <h3>生产关系驱动的商业模式</h3>
+      <span class="dim-subtitle">平台经济、零工经济与开源社区的关系重构</span>
+    </div>
+    <div class="models-grid">
+      <div class="model-card" data-dim="relation">
+        <div class="card-header">
+          <div class="card-model-name">双边平台 / 市场创造者</div>
+          <div class="card-tags"><span class="card-tag tag-relation">生产关系</span></div>
+        </div>
+        <div class="card-logic">
+          不拥有生产资料（不持有库存、不雇佣司机），却通过重构买卖双方的交易关系获取价值。
+          平台的核心资产是"关系网络"本身——参与者越多，网络价值越高，替代越难。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--relation-color)">淘</div>
+            <div class="company-info">
+              <div class="co-name">阿里巴巴 / 淘宝</div>
+              <div class="co-analysis">"让天下没有难做的生意"——本质是重构了小商家与消费者之间的信任关系（支付宝担保交易）和发现关系（搜索排名）。淘宝不卖货，卖的是"交易关系的基础设施"。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--relation-color)">U</div>
+            <div class="company-info">
+              <div class="co-name">Uber</div>
+              <div class="co-analysis">不拥有一辆车（生产资料），不雇佣一个司机（劳动力），却创造了全球最大的出行网络。Uber的全部价值在于"乘客-司机"匹配关系的效率和密度。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card" data-dim="relation">
+        <div class="card-header">
+          <div class="card-model-name">开源社区 / 众包协作</div>
+          <div class="card-tags"><span class="card-tag tag-relation">生产关系</span></div>
+        </div>
+        <div class="card-logic">
+          打破雇佣关系的边界，全球开发者以志愿方式协作生产软件。核心生产关系从"雇佣"变为"贡献"，
+          从"工资"变为"声誉"。这是数字时代对传统劳资关系最激进的重构。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--relation-color)">R</div>
+            <div class="company-info">
+              <div class="co-name">Red Hat（被IBM收购）</div>
+              <div class="co-analysis">将免费的Linux开源软件变成340亿美元的商业价值。商业模式不是卖软件（人人免费使用），而是卖"使用开源软件的支持关系"——订阅、培训、认证。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--relation-color)">维</div>
+            <div class="company-info">
+              <div class="co-name">维基百科 Wikipedia</div>
+              <div class="co-analysis">10万+志愿编辑者创造了人类历史上最大的百科全书。零雇佣成本、零版权费，纯靠社区关系驱动。证明了在正确的生产关系设计下，志愿协作可以击败商业巨头。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="timeline-divider">
+  <div class="timeline-line"></div>
+  <div class="timeline-arrow" style="color:var(--ai-primary)">✦</div>
+  <div class="timeline-line"></div>
+</div>
+
+<!-- ============================================ -->
+<!-- ===== ERA 4: AI AGE ===== -->
+<!-- ============================================ -->
+<section class="era-section ai-vision-section" id="ai">
+  <div class="era-header fade-up">
+    <div class="era-epoch" style="color:var(--ai-primary)">ERA IV · 2020s — 未来</div>
+    <h2 style="color:var(--ai-primary)">AI 时代</h2>
+    <p class="thesis">
+      当智能本身可以被批量生产和交易时，三大经济维度将同时发生范式级断裂——<br>
+      生产力从"人+工具"跃迁为"AI Agent自主生产"，生产资料从实物资源扩展到模型权重与合成数据，<br>
+      生产关系从"人与人"拓展为"人与AI"乃至"AI与AI"的全新协作矩阵。
+    </p>
+  </div>
+
+  <!-- 生产力 -->
+  <div class="dimension-block fade-up">
+    <div class="dim-title-bar">
+      <div class="dim-icon" style="background:rgba(224,96,80,0.15);color:var(--force-color)">⚡</div>
+      <h3>生产力驱动的商业模式 · 畅想</h3>
+      <span class="dim-subtitle">智能即生产力，认知劳动可规模化复制</span>
+    </div>
+    <div class="models-grid">
+      <div class="model-card vision-card" data-dim="force">
+        <div class="speculative-badge">前沿畅想</div>
+        <div class="card-header">
+          <div class="card-model-name">AI Agent 即服务（AaaS）</div>
+          <div class="card-tags"><span class="card-tag tag-force">生产力</span></div>
+        </div>
+        <div class="card-logic">
+          从"软件工具辅助人"到"AI Agent替代人执行完整任务流"。SaaS卖的是工具，AaaS卖的是成果。
+          企业不再购买CRM系统，而是直接购买"每月完成1000次客户跟进"的AI Agent服务。
+          生产力的交付单位从"工具许可"变为"任务完成"。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">D</div>
+            <div class="company-info">
+              <div class="co-name">Devin / Cognition AI（雏形）</div>
+              <div class="co-analysis">首个自主编程AI Agent。未来形态：企业不雇程序员，按"需求→代码"的完成件付费。1个AI Agent = 无限并行的初级工程师产能。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">H</div>
+            <div class="company-info">
+              <div class="co-name">Harvey AI（法律AI）</div>
+              <div class="co-analysis">AI律师助手正在演变为"AI律所"——批量处理尽职调查、合同审查、案例研究。未来：按法律问题数量而非按律师工时计费的全新商业模式。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card vision-card" data-dim="force">
+        <div class="speculative-badge">前沿畅想</div>
+        <div class="card-header">
+          <div class="card-model-name">个性化知识生产工厂</div>
+          <div class="card-tags"><span class="card-tag tag-force">生产力</span></div>
+        </div>
+        <div class="card-logic">
+          AI使"为一个人定制一本教材""为一家企业生成专属研报"的成本趋近于零。
+          知识生产从"一对多出版"转变为"一对一生成"。每个人拥有自己的AI教师、AI分析师、AI顾问——
+          认知生产力实现了"千人千面"的极致个性化。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">K</div>
+            <div class="company-info">
+              <div class="co-name">Khan Academy + Khanmigo</div>
+              <div class="co-analysis">AI家教为每个学生定制教学节奏和讲解方式。未来愿景：教育不再是"一个教师对几十个学生"，而是"每人一个无限耐心的AI导师"。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生产资料 -->
+  <div class="dimension-block fade-up">
+    <div class="dim-title-bar">
+      <div class="dim-icon" style="background:rgba(80,184,112,0.15);color:var(--means-color)">🏭</div>
+      <h3>生产资料驱动的商业模式 · 畅想</h3>
+      <span class="dim-subtitle">模型、算力与合成数据成为新时代的石油、电力与土地</span>
+    </div>
+    <div class="models-grid">
+      <div class="model-card vision-card" data-dim="means">
+        <div class="speculative-badge">前沿畅想</div>
+        <div class="card-header">
+          <div class="card-model-name">基础模型即基础设施</div>
+          <div class="card-tags"><span class="card-tag tag-means">生产资料</span></div>
+        </div>
+        <div class="card-logic">
+          大语言模型/多模态模型是AI时代的"操作系统"——一切AI应用都建立在基础模型之上。
+          训练一个前沿模型需要数十亿美元，自然形成寡头垄断格局。
+          谁拥有最强模型，谁就掌控了AI时代最底层的生产资料。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">O</div>
+            <div class="company-info">
+              <div class="co-name">OpenAI</div>
+              <div class="co-analysis">GPT系列模型是全球数百万开发者的基础设施。API调用量以十亿计。OpenAI之于AI应用，正如AWS之于互联网应用——生产资料的控制者收取"智能税"。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">A</div>
+            <div class="company-info">
+              <div class="co-name">Anthropic</div>
+              <div class="co-analysis">Claude系列模型以安全对齐见长，差异化定位"值得信赖的AI基础设施"。在基础模型寡头竞争中，安全性本身成为生产资料的品质维度。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card vision-card" data-dim="means">
+        <div class="speculative-badge">前沿畅想</div>
+        <div class="card-header">
+          <div class="card-model-name">算力交易市场</div>
+          <div class="card-tags"><span class="card-tag tag-means">生产资料</span></div>
+        </div>
+        <div class="card-logic">
+          GPU集群是AI时代的"发电站"，算力是AI时代的"电力"。
+          未来将出现算力期货、算力ETF、算力现货交易所——算力从技术资源变为金融资产，
+          如同石油从燃料变为全球大宗商品交易的核心标的。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">N</div>
+            <div class="company-info">
+              <div class="co-name">NVIDIA</div>
+              <div class="co-analysis">H100/B200芯片的全球争夺已堪比石油危机。NVIDIA不只是芯片公司，更是"AI时代算力OPEC"——掌控着AI训练推理的关键瓶颈资源。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">联</div>
+            <div class="company-info">
+              <div class="co-name">去中心化算力网络（畅想）</div>
+              <div class="co-analysis">类似Airbnb将闲置房屋变为酒店，未来可能出现将全球闲置GPU联网的"算力Airbnb"——分布式计算资源共享市场，打破算力巨头的垄断。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card vision-card" data-dim="means">
+        <div class="speculative-badge">前沿畅想</div>
+        <div class="card-header">
+          <div class="card-model-name">合成数据工厂</div>
+          <div class="card-tags"><span class="card-tag tag-means">生产资料</span></div>
+        </div>
+        <div class="card-logic">
+          当真实数据用尽，AI用AI生成训练数据。合成数据是AI时代的"人造石油"——
+          它不依赖自然采集，可以按需生产、定向优化。谁掌握高质量合成数据管线，
+          谁就拥有了自我增殖的生产资料。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">S</div>
+            <div class="company-info">
+              <div class="co-name">Scale AI</div>
+              <div class="co-analysis">从人工标注起家，正在转向AI辅助标注和合成数据生成。未来形态：全自动"数据炼油厂"——输入原始文本/图像，输出高质量标注训练集。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生产关系 -->
+  <div class="dimension-block fade-up">
+    <div class="dim-title-bar">
+      <div class="dim-icon" style="background:rgba(80,128,224,0.15);color:var(--relation-color)">🤝</div>
+      <h3>生产关系驱动的商业模式 · 畅想</h3>
+      <span class="dim-subtitle">人-AI协作、DAO治理与全新雇佣范式</span>
+    </div>
+    <div class="models-grid">
+      <div class="model-card vision-card" data-dim="relation">
+        <div class="speculative-badge">前沿畅想</div>
+        <div class="card-header">
+          <div class="card-model-name">人-AI协作新雇佣关系</div>
+          <div class="card-tags"><span class="card-tag tag-relation">生产关系</span></div>
+        </div>
+        <div class="card-logic">
+          传统公司：人管理人。AI时代公司：人管理AI、AI辅助人、AI协调AI。
+          员工的核心能力从"执行任务"变为"编排AI Agent"。组织架构从金字塔变为
+          "一个人+N个AI Agent"的蜂巢式结构。一人公司可以拥有百人规模的产出能力。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">一</div>
+            <div class="company-info">
+              <div class="co-name">"一人独角兽"公司（趋势）</div>
+              <div class="co-analysis">Sam Altman预言"一人十亿美元公司"将会出现。AI把协调成本、沟通成本、管理成本压缩到极致，单个创始人+AI Agent集群=一个完整企业。生产关系从"分工协作"变为"编排调度"。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">C</div>
+            <div class="company-info">
+              <div class="co-name">Cursor / Replit（开发范式先驱）</div>
+              <div class="co-analysis">AI编程助手已经改写了"人写代码"的生产关系——从"人思考+人编码"变成"人思考+AI编码+人审核"。3人团队可以达到30人团队的代码产出。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card vision-card" data-dim="relation">
+        <div class="speculative-badge">前沿畅想</div>
+        <div class="card-header">
+          <div class="card-model-name">AI Agent 经济体 / 智能体市场</div>
+          <div class="card-tags"><span class="card-tag tag-relation">生产关系</span></div>
+        </div>
+        <div class="card-logic">
+          AI Agent之间可以自主谈判、交易、协作。未来可能出现"Agent-to-Agent"的经济体系——
+          你的个人AI助手自主寻找最优机票、与航空公司AI谈判价格、与你的日程AI协调时间。
+          生产关系从"人与人"扩展为"Agent与Agent"。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">链</div>
+            <div class="company-info">
+              <div class="co-name">Agent Protocol / AI Agent交易所（畅想）</div>
+              <div class="co-analysis">类似互联网的HTTP协议统一了网页通信，未来需要"Agent协议"统一AI Agent之间的交互语言。围绕此协议将诞生Agent市场、Agent保险、Agent信用评级等全新商业形态。</div>
+            </div>
+          </div>
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">D</div>
+            <div class="company-info">
+              <div class="co-name">AI原生DAO（去中心化自治组织）</div>
+              <div class="co-analysis">DAO的治理瓶颈一直是人类协调效率低下。当AI Agent可以代表持币者参与投票、执行提案、监督执行时，DAO才能真正实现"去中心化自治"——AI让治理成本趋近于零。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="model-card vision-card" data-dim="relation">
+        <div class="speculative-badge">前沿畅想</div>
+        <div class="card-header">
+          <div class="card-model-name">全民AI红利 / 智能公地</div>
+          <div class="card-tags"><span class="card-tag tag-relation">生产关系</span></div>
+        </div>
+        <div class="card-logic">
+          当AI替代大量人类劳动时，如何重新分配AI创造的财富？可能出现"AI产出税"
+          或"模型公地"——基础模型作为公共资源，其生产成果按某种机制向全社会分配。
+          这将是生产关系层面的根本性重构。
+        </div>
+        <div class="card-companies">
+          <div class="company-item">
+            <div class="company-logo" style="color:var(--ai-primary)">W</div>
+            <div class="company-info">
+              <div class="co-name">Worldcoin / OpenAI UBI实验</div>
+              <div class="co-analysis">Sam Altman推动的Worldcoin尝试为全球人类建立数字身份，以便未来分发AI红利。核心假设：AI时代的"生产关系"问题不是"如何分工"，而是"如何分配AI创造的超额价值"。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="timeline-divider">
+  <div class="timeline-line"></div>
+  <div class="timeline-arrow" style="color:var(--hybrid-color)">◆</div>
+  <div class="timeline-line"></div>
+</div>
+
+<!-- ============================================ -->
+<!-- ===== CONVERGENCE: 三力融合案例 ===== -->
+<!-- ============================================ -->
+<section class="convergence-section" id="converge">
+  <div class="convergence-header fade-up">
+    <h2>三力融合 · 跨维度商业巨头</h2>
+    <p style="color:var(--text-secondary);max-width:700px;margin:16px auto 0;font-size:15px;line-height:1.9;">
+      最强大的商业模式往往同时在生产力、生产资料、生产关系三个维度建立壁垒。<br>
+      以下是各时代中三力融合的典型案例。
+    </p>
+  </div>
+
+  <div class="convergence-grid">
+
+    <div class="convergence-card fade-up">
+      <div class="conv-era-badge" style="background:var(--agri-glow);color:var(--agri-primary)">农业时代</div>
+      <div class="conv-company">丝绸之路贸易商行</div>
+      <div class="conv-subtitle">跨文明贸易网络的三维整合</div>
+      <div class="conv-analysis">
+        以粟特商人为代表的丝路商队，同时整合了三个维度：掌握跨沙漠导航与驼队运输的专业技术（生产力），
+        控制绿洲驿站、商队骆驼和多语种翻译人才（生产资料），
+        建立了基于宗族信任与跨文化外交的贸易网络关系（生产关系）。
+      </div>
+      <div class="conv-breakdown">
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(224,96,80,0.15);color:var(--force-color)">生产力</div>
+          <div class="conv-dim-text">沙漠导航术、商品保鲜技术、多语种沟通能力</div>
+        </div>
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(80,184,112,0.15);color:var(--means-color)">生产资料</div>
+          <div class="conv-dim-text">骆驼商队、绿洲驿站控制权、沿线仓储设施</div>
+        </div>
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(80,128,224,0.15);color:var(--relation-color)">生产关系</div>
+          <div class="conv-dim-text">宗族担保网络、多国政权保护关系、跨文明信用体系</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="convergence-card fade-up">
+      <div class="conv-era-badge" style="background:var(--indus-glow);color:var(--indus-primary)">工业时代</div>
+      <div class="conv-company">福特汽车（全盛期）</div>
+      <div class="conv-subtitle">从铁矿到经销商的全链条帝国</div>
+      <div class="conv-analysis">
+        亨利·福特不仅发明了流水线（生产力），还建造了世界上最大的工业综合体Rouge River——
+        从铁矿石进厂到成车出厂，所有生产资料自有。
+        同时，5美元日薪制度彻底改写了劳资关系，把工人变成消费者——一个商业模式同时改变了三个维度。
+      </div>
+      <div class="conv-breakdown">
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(224,96,80,0.15);color:var(--force-color)">生产力</div>
+          <div class="conv-dim-text">流水线装配发明，组装时间从12h→93min</div>
+        </div>
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(80,184,112,0.15);color:var(--means-color)">生产资料</div>
+          <div class="conv-dim-text">自有铁矿、橡胶园、铁路、玻璃厂、发电站</div>
+        </div>
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(80,128,224,0.15);color:var(--relation-color)">生产关系</div>
+          <div class="conv-dim-text">$5日薪=2倍行业标准，工人→消费者的身份重构</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="convergence-card fade-up">
+      <div class="conv-era-badge" style="background:var(--info-glow);color:var(--info-primary)">信息时代</div>
+      <div class="conv-company">Apple 苹果公司</div>
+      <div class="conv-subtitle">硬件·软件·生态的三位一体</div>
+      <div class="conv-analysis">
+        苹果是信息时代三力融合的完美案例：自主研发芯片和操作系统（生产力），
+        掌控从芯片设计到零售店的全链条（生产资料），
+        通过App Store建立了开发者-用户的双边生态关系（生产关系）。三者相互增强，形成飞轮。
+      </div>
+      <div class="conv-breakdown">
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(224,96,80,0.15);color:var(--force-color)">生产力</div>
+          <div class="conv-dim-text">M系列自研芯片、iOS/macOS操作系统、Swift开发语言</div>
+        </div>
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(80,184,112,0.15);color:var(--means-color)">生产资料</div>
+          <div class="conv-dim-text">全球500+零售店、供应链独占协议、专利矩阵</div>
+        </div>
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(80,128,224,0.15);color:var(--relation-color)">生产关系</div>
+          <div class="conv-dim-text">App Store 30%佣金制、开发者生态锁定、用户品牌忠诚</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="convergence-card fade-up">
+      <div class="conv-era-badge" style="background:var(--info-glow);color:var(--info-primary)">信息时代</div>
+      <div class="conv-company">Amazon 亚马逊</div>
+      <div class="conv-subtitle">从卖书到万物基础设施</div>
+      <div class="conv-analysis">
+        亚马逊的护城河不是任何单一维度，而是三者的飞轮效应：
+        物流效率（生产力）→ 更多卖家入驻（生产关系）→ 更多数据和基础设施（生产资料）→ 
+        更强的效率优化 → 循环加速。贝索斯的"Day 1"哲学就是永远不让飞轮停转。
+      </div>
+      <div class="conv-breakdown">
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(224,96,80,0.15);color:var(--force-color)">生产力</div>
+          <div class="conv-dim-text">Kiva机器人仓储、推荐算法、Prime次日达物流</div>
+        </div>
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(80,184,112,0.15);color:var(--means-color)">生产资料</div>
+          <div class="conv-dim-text">AWS全球云基础设施、消费者购买数据、仓储网络</div>
+        </div>
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(80,128,224,0.15);color:var(--relation-color)">生产关系</div>
+          <div class="conv-dim-text">第三方卖家平台（60%GMV）、Prime会员锁定、FBA服务</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="convergence-card fade-up" style="border-color:rgba(176,122,223,0.2);">
+      <div class="conv-era-badge" style="background:var(--ai-glow);color:var(--ai-primary)">AI 时代 · 畅想</div>
+      <div class="conv-company">AI原生超级公司（预测形态）</div>
+      <div class="conv-subtitle">基础模型 + 算力网络 + Agent生态 三位一体</div>
+      <div class="conv-analysis">
+        AI时代的"Apple"或"Amazon"将同时控制三个维度：
+        拥有最强基础模型（生产力），掌控训练推理所需的算力网络（生产资料），
+        并构建全球最大的AI Agent生态系统（生产关系）。
+        这样的公司可能以前所未有的速度达到万亿美元市值——也将面临前所未有的监管挑战。
+      </div>
+      <div class="conv-breakdown">
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(224,96,80,0.15);color:var(--force-color)">生产力</div>
+          <div class="conv-dim-text">前沿基础模型、多模态推理能力、Agent编排系统</div>
+        </div>
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(80,184,112,0.15);color:var(--means-color)">生产资料</div>
+          <div class="conv-dim-text">自研AI芯片、全球分布式数据中心、合成数据管线</div>
+        </div>
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(80,128,224,0.15);color:var(--relation-color)">生产关系</div>
+          <div class="conv-dim-text">Agent App Store、开发者API生态、Agent间交易协议</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="convergence-card fade-up" style="border-color:rgba(176,122,223,0.2);">
+      <div class="conv-era-badge" style="background:var(--ai-glow);color:var(--ai-primary)">AI 时代 · 畅想</div>
+      <div class="conv-company">个人AI经济体（终极形态）</div>
+      <div class="conv-subtitle">每个人都是一家AI驱动的微型企业</div>
+      <div class="conv-analysis">
+        终极畅想：当AI足够强大且足够便宜时，每个人都可以拥有自己的"AI员工团队"——
+        个人AI管家调度专业AI Agent完成工作、投资、创作、社交。
+        传统公司可能解体为"个体AI节点"的协作网络。生产力、生产资料、生产关系在个人层面三位一体。
+      </div>
+      <div class="conv-breakdown">
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(224,96,80,0.15);color:var(--force-color)">生产力</div>
+          <div class="conv-dim-text">个人定制化AI Agent集群 → 百倍于个体的产出能力</div>
+        </div>
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(80,184,112,0.15);color:var(--means-color)">生产资料</div>
+          <div class="conv-dim-text">个人数据主权、微型算力份额、专属模型微调权</div>
+        </div>
+        <div class="conv-dim-row">
+          <div class="conv-dim-label" style="background:rgba(80,128,224,0.15);color:var(--relation-color)">生产关系</div>
+          <div class="conv-dim-text">P2P Agent协作网络、个体间智能合约、去中介化交易</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="timeline-divider">
+  <div class="timeline-line"></div>
+  <div class="timeline-arrow">≡</div>
+  <div class="timeline-line"></div>
+</div>
+
+<!-- ============================================ -->
+<!-- ===== EVOLUTION MATRIX ===== -->
+<!-- ============================================ -->
+<section class="evo-map-section" id="matrix">
+  <div class="convergence-header fade-up">
+    <h2>跨时代演进矩阵</h2>
+    <p style="color:var(--text-secondary);max-width:700px;margin:16px auto 0;font-size:15px;line-height:1.9;">
+      从农业到AI，三个维度各自如何演进？对照阅读可发现深层规律。
+    </p>
+  </div>
+
+  <div style="overflow-x:auto;" class="fade-up">
+    <table class="evo-matrix">
+      <thead>
+        <tr>
+          <th style="text-align:left;min-width:100px;">维度</th>
+          <th style="color:var(--agri-primary);min-width:200px;">农业时代</th>
+          <th style="color:var(--indus-primary);min-width:200px;">工业时代</th>
+          <th style="color:var(--info-primary);min-width:200px;">信息时代</th>
+          <th style="color:var(--ai-primary);min-width:200px;">AI 时代</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--force-color)">⚡ 生产力<br>核心来源</td>
+          <td>人力 + 畜力 + 简单工具<br><span class="cell-keyword">个人技艺</span><span class="cell-keyword">经验传承</span></td>
+          <td>机器 + 能源 + 流水线<br><span class="cell-keyword">机械化</span><span class="cell-keyword">标准化</span></td>
+          <td>软件 + 算法 + 网络<br><span class="cell-keyword">数字化</span><span class="cell-keyword">自动化</span></td>
+          <td>AI模型 + Agent + 自主推理<br><span class="cell-keyword">智能化</span><span class="cell-keyword">自主化</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--force-color)">⚡ 生产力<br>提升逻辑</td>
+          <td>经验积累<br>代际传承，线性增长</td>
+          <td>资本投入<br>机器换人，指数增长</td>
+          <td>代码复用<br>零边际成本，网络效应</td>
+          <td>智能涌现<br>模型自我改进，超线性增长</td>
+        </tr>
+        <tr>
+          <td style="color:var(--means-color)">🏭 生产资料<br>核心资产</td>
+          <td>土地、水源、种子<br><span class="cell-keyword">自然资源</span></td>
+          <td>工厂、矿山、铁路<br><span class="cell-keyword">物理资产</span></td>
+          <td>数据、服务器、平台<br><span class="cell-keyword">数字资产</span></td>
+          <td>模型权重、算力、合成数据<br><span class="cell-keyword">智能资产</span></td>
+        </tr>
+        <tr>
+          <td style="color:var(--means-color)">🏭 生产资料<br>垄断方式</td>
+          <td>武力征服<br>封建世袭，法律特许</td>
+          <td>资本兼并<br>专利壁垒，规模经济</td>
+          <td>网络效应<br>数据飞轮，平台锁定</td>
+          <td>算力壁垒<br>模型护城河，数据闭环</td>
+        </tr>
+        <tr>
+          <td style="color:var(--relation-color)">🤝 生产关系<br>核心模式</td>
+          <td>地主-佃农<br>师父-学徒，行会等级</td>
+          <td>资本家-工人<br>股东-经理人，雇佣制</td>
+          <td>平台-参与者<br>开源社区，零工经济</td>
+          <td>人-AI协作<br>Agent网络，DAO治理</td>
+        </tr>
+        <tr>
+          <td style="color:var(--relation-color)">🤝 生产关系<br>分配机制</td>
+          <td>地租抽取<br>等级固化，世袭传承</td>
+          <td>工资制度<br>利润分红，股权激励</td>
+          <td>平台佣金<br>流量分配，注意力变现</td>
+          <td>AI产出分配<br>智能合约，全民AI红利？</td>
+        </tr>
+        <tr>
+          <td style="color:var(--hybrid-color)">◆ 代表性<br>融合模式</td>
+          <td>丝路贸易商行<br>盐铁专营体系</td>
+          <td>福特垂直帝国<br>财阀/康采恩</td>
+          <td>Apple/Amazon<br>超级平台飞轮</td>
+          <td>AI原生超级公司<br>个人AI经济体</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>商业模式全景研究 · 生产力 · 生产资料 · 生产关系 · 四时代演进框架</p>
+</footer>
+
+<script>
+// ===== Scroll animation =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// ===== Era Navigation =====
+const navBtns = document.querySelectorAll('.era-nav-btn');
+const sections = {
+  agri: document.getElementById('agri'),
+  indus: document.getElementById('indus'),
+  info: document.getElementById('info'),
+  ai: document.getElementById('ai'),
+  converge: document.getElementById('converge'),
+  matrix: document.getElementById('matrix')
+};
+
+navBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const era = btn.dataset.era;
+    if (sections[era]) {
+      sections[era].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    navBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// ===== Active nav on scroll =====
+const sectionEntries = Object.entries(sections);
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navBtns.forEach(b => {
+        b.classList.toggle('active', b.dataset.era === id);
+      });
+    }
+  });
+}, { threshold: 0.2 });
+
+sectionEntries.forEach(([, el]) => { if(el) navObserver.observe(el); });
+
+// ===== Card hover glow =====
+document.querySelectorAll('.model-card, .convergence-card').forEach(card => {
+  card.addEventListener('mouseenter', function() {
+    this.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+  });
+});
+</script>
+</body>
+</html>
