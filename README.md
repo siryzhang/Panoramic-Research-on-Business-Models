@@ -1,6 +1,10 @@
 # 商业模式全景研究 — 生产力 · 生产资料 · 生产关系
 
 > 从马克思政治经济学的三大基石出发，跨越农业、工业、信息、AI 四个文明时代，系统解构商业模式的底层驱动逻辑，并畅想 AI 时代的全新商业形态。
+>
+> 🔗访问链接： https://siryzhang.github.io/Panoramic-Research-on-Business-Models/
+
+
 
 ## 📖 项目简介
 
@@ -53,10 +57,6 @@
 - 深色编辑风格，Noto Serif SC / Noto Sans SC 字体
 - 粘性导航、滚动动画、卡片交互
 - 响应式设计，适配桌面与移动端
-
-## 🚀 使用方式
-
-直接在浏览器中打开：https://siryzhang.github.io/Panoramic-Research-on-Business-Models/ 
 
 ## 📚 理论背景
 
