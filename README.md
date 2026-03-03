@@ -56,13 +56,7 @@
 
 ## 🚀 使用方式
 
-直接在浏览器中打开 `business_models_panorama.html` 即可，或通过 GitHub Pages 部署：
-
-```
-Settings → Pages → Source: main branch → / (root)
-```
-
-然后访问 `https://<username>.github.io/<repo>/business_models_panorama.html`
+直接在浏览器中打开：https://siryzhang.github.io/Panoramic-Research-on-Business-Models/ 
 
 ## 📚 理论背景
 
